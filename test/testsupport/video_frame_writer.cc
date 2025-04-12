@@ -20,6 +20,7 @@
 #include "api/video/i420_buffer.h"
 #include "common_video/libyuv/include/webrtc_libyuv.h"
 #include "rtc_base/logging.h"
+#include "rtc_base/time_utils.h"
 
 namespace webrtc {
 namespace test {
@@ -71,6 +72,7 @@ Y4mVideoFrameWriterImpl::Y4mVideoFrameWriterImpl(std::string output_file_name,
 bool Y4mVideoFrameWriterImpl::WriteFrame(const webrtc::VideoFrame& frame) {
   rtc::Buffer frame_buffer = ExtractI420BufferWithSize(frame, width_, height_);
   RTC_CHECK_EQ(frame_buffer.size(), frame_writer_->FrameLength());
+  RTC_LOG(INFO) << "FRAME WRITE: " << rtc::TimeMicros();
   return frame_writer_->WriteFrame(frame_buffer.data());
 }
 
@@ -91,6 +93,7 @@ YuvVideoFrameWriterImpl::YuvVideoFrameWriterImpl(std::string output_file_name,
                                                width_,
                                                height_)) {
   // Init underlying frame writer and ensure that it is operational.
+  RTC_LOG(INFO) << "FRAME WRITE: " << rtc::TimeMicros();
   RTC_CHECK(frame_writer_->Init());
 }
 
